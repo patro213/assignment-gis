@@ -57,12 +57,12 @@ public class Controller {
 
             if (amenity) {
                 String selectAmenity = "SELECT row_to_json(f) FROM " +
-                        "(SELECT 'Feature' As type, ST_AsGeoJSON(ST_Transform(way,4326))::json As geometry, " +
+                        "(SELECT 'Feature' AS type, ST_AsGeoJSON(ST_Transform(way,4326))::json AS geometry, " +
                         "(select row_to_json(t) FROM " +
-                        "(SELECT name as title, amenity as markersymbol) As t) As prop " +
+                        "(SELECT name AS title, amenity AS markersymbol) AS t) AS prop " +
                         "FROM planet_osm_point " +
-                        "where name <> '' and " + amenityValues.toString() + " " +
-                        "and ST_Contains((SELECT ST_Buffer(ST_MakePoint(" + radiusData.getLng() + "," + radiusData.getLat() + ")::geography," + radiusData.getRadius() + "))::geometry, (st_transform(way::geometry,4326))::geometry)) As f;";
+                        "WHERE name <> '' AND " + amenityValues.toString() + " " +
+                        "AND ST_Contains((SELECT ST_Buffer(ST_MakePoint(" + radiusData.getLng() + "," + radiusData.getLat() + ")::geography," + radiusData.getRadius() + "))::geometry, (st_transform(way::geometry,4326))::geometry)) AS f;";
 
                 stmt = conn.prepareStatement(selectAmenity);
                 rs = stmt.executeQuery();
@@ -79,13 +79,13 @@ public class Controller {
 
             if (tourism) {
                 String selectTourism = "SELECT row_to_json(f) FROM " +
-                        "(SELECT 'Feature' As type, ST_AsGeoJSON(ST_Transform(way,4326))::json As geometry, " +
-                        "(select row_to_json(t) FROM " +
-                        "(SELECT name as title, tourism as markersymbol) As t) As prop " +
+                        "(SELECT 'Feature' AS type, ST_AsGeoJSON(ST_Transform(way,4326))::json AS geometry, " +
+                        "(SELECT row_to_json(t) FROM " +
+                        "(SELECT name AS title, tourism as markersymbol) AS t) AS prop " +
                         "FROM planet_osm_point " +
-                        "where name <> '' and " + tourismValues.toString() + " and " +
+                        "WHERE name <> '' AND " + tourismValues.toString() + " AND " +
                         "ST_Contains(" +
-                        "(SELECT ST_Buffer(ST_MakePoint(" + radiusData.getLng() + "," + radiusData.getLat() + ")::geography," + radiusData.getRadius() + "))::geometry, (st_transform(way::geometry,4326))::geometry)) As f;";
+                        "(SELECT ST_Buffer(ST_MakePoint(" + radiusData.getLng() + "," + radiusData.getLat() + ")::geography," + radiusData.getRadius() + "))::geometry, (st_transform(way::geometry,4326))::geometry)) AS f;";
 
                 stmt = conn.prepareStatement(selectTourism);
                 rs = stmt.executeQuery();
@@ -122,7 +122,7 @@ public class Controller {
         System.out.println("---------------findHotels-------------------");
 
         int arrayLength = pointList.size();
-        String selectStatementString = "";
+        String hotels = "";
         String hotelsPolygon = "";
         int distancePolygon = 0;
         int distancePoint = 100;
@@ -162,41 +162,41 @@ public class Controller {
                     double lng = pointList.get(0).getLng();
                     double lat = pointList.get(0).getLat();
 
-                    selectStatementString = "SELECT row_to_json(f) FROM " +
-                            "(SELECT 'Feature' As type, ST_AsGeoJSON(ST_Transform(way,4326))::json As geometry, " +
-                            "(select row_to_json(t) FROM " +
-                            "(SELECT name as title, tourism as markersymbol) As t) As prop " +
+                    hotels = "SELECT row_to_json(f) FROM " +
+                            "(SELECT 'Feature' AS type, ST_AsGeoJSON(ST_Transform(way,4326))::json AS geometry, " +
+                            "(SELECT row_to_json(t) FROM " +
+                            "(SELECT name AS title, tourism AS markersymbol) AS t) AS prop " +
                             "FROM planet_osm_point " +
-                            "where tourism like 'hotel' and name <> '' and " +
+                            "WHERE tourism LIKE 'hotel' AND name <> '' AND " +
                             "st_contains(" +
-                            "(SELECT ST_Buffer(ST_MakePoint(" + lng + "," + lat + ")::geography," + distancePoint + "))::geometry, (st_transform(way::geometry,4326))::geometry)) As f;";
+                            "(SELECT ST_Buffer(ST_MakePoint(" + lng + "," + lat + ")::geography," + distancePoint + "))::geometry, (st_transform(way::geometry,4326))::geometry)) AS f;";
 
                     hotelsPolygon = "SELECT ST_AsGeoJSON(ST_Buffer(ST_MakePoint(" + lng + "," + lat + ")::geography," + distancePoint + "));";
                 } else if (arrayLength == 2) {
-                    selectStatementString = "SELECT row_to_json(f) FROM " +
-                            "(SELECT 'Feature' As type, ST_AsGeoJSON(ST_Transform(way,4326))::json As geometry, " +
-                            "(select row_to_json(t) FROM " +
-                            "(SELECT name as title, tourism as markersymbol) As t) As prop " +
+                    hotels = "SELECT row_to_json(f) FROM " +
+                            "(SELECT 'Feature' AS type, ST_AsGeoJSON(ST_Transform(way,4326))::json AS geometry, " +
+                            "(SELECT row_to_json(t) FROM " +
+                            "(SELECT name AS title, tourism AS markersymbol) AS t) AS prop " +
                             "FROM planet_osm_point " +
-                            "where tourism like 'hotel' and name <> '' and " +
+                            "WHERE tourism LIKE 'hotel' AND name <> '' AND " +
                             "st_contains(" +
-                            "(SELECT ST_Buffer(ST_MakeLine(" + finalQueryPoint + ")::geography, " + distancePoint + "))::geometry, (st_transform(way::geometry,4326))::geometry)) As f;";
+                            "(SELECT ST_Buffer(ST_MakeLine(" + finalQueryPoint + ")::geography, " + distancePoint + "))::geometry, (st_transform(way::geometry,4326))::geometry)) AS f;";
 
                     hotelsPolygon = "SELECT ST_AsGeoJSON(ST_Buffer(ST_MakeLine(" + finalQueryPoint + ")::geography, " + distancePoint + "));";
                 } else {
-                    selectStatementString = "SELECT row_to_json(f) FROM " +
-                            "(SELECT 'Feature' As type, ST_AsGeoJSON(ST_Transform(way,4326))::json As geometry, " +
-                            "(select row_to_json(t) FROM " +
-                            "(SELECT name as title, tourism as markersymbol) As t) As prop " +
+                    hotels = "SELECT row_to_json(f) FROM " +
+                            "(SELECT 'Feature' AS type, ST_AsGeoJSON(ST_Transform(way,4326))::json AS geometry, " +
+                            "(SELECT row_to_json(t) FROM " +
+                            "(SELECT name AS title, tourism AS markersymbol) AS t) AS prop " +
                             "FROM planet_osm_point " +
-                            "where tourism like 'hotel' and name <> '' and " +
+                            "WHERE tourism LIKE 'hotel' AND name <> '' AND " +
                             "st_contains(" +
-                            "(SELECT ST_Buffer(ST_MakePolygon(ST_GeomFromText('LINESTRING(" + finalQuery + ")'))::geography, " + distancePolygon + "))::geometry, (st_transform(way::geometry,4326))::geometry)) As f;";
+                            "(SELECT ST_Buffer(ST_MakePolygon(ST_GeomFromText('LINESTRING(" + finalQuery + ")'))::geography, " + distancePolygon + "))::geometry, (st_transform(way::geometry,4326))::geometry)) AS f;";
 
                     hotelsPolygon = "SELECT ST_AsGeoJSON(ST_Buffer(ST_MakePolygon(ST_GeomFromText('LINESTRING(" + finalQuery + ")'))::geography, " + distancePolygon + "));";
                 }
 
-                stmt = conn.prepareStatement(selectStatementString);
+                stmt = conn.prepareStatement(hotels);
                 ResultSet rs = stmt.executeQuery();
 
                 while (rs.next()) {
@@ -265,11 +265,11 @@ public class Controller {
         try {
             conn = DriverManager.getConnection(connectionString, connectionProps);
 
-            String selectStatementString = "SELECT ST_AsGeoJSON(ST_Transform(way,4326))::json As geometry " +
+            String heatMapData = "SELECT ST_AsGeoJSON(ST_Transform(way,4326))::json AS geometry " +
                     "FROM planet_osm_point " +
-                    "where (amenity IN('theatre','cinema','bar') or tourism IN('hotel','museum','gallery')) and name <> '';";
+                    "WHERE (amenity IN('theatre','cinema','bar') OR tourism IN('hotel','museum','gallery')) AND name <> '';";
 
-            stmt = conn.prepareStatement(selectStatementString);
+            stmt = conn.prepareStatement(heatMapData);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 if (rs.isLast()) {
@@ -314,12 +314,16 @@ public class Controller {
 
             // spravi z rieky polygon
             String riverAsPolygon = "SELECT row_to_json(f) FROM " +
-                    "(SELECT 'Feature' As type, ST_AsGeoJSON(ST_Buffer(ST_union(ST_Transform(way,4326))::geography, 500))::json As geometry  " +
+                    "(SELECT 'Feature' AS type, ST_AsGeoJSON(ST_Buffer(ST_union(ST_Transform(way,4326))::geography, 500))::json AS geometry  " +
                     "FROM planet_osm_line " +
-                    "where waterway like 'river' and name like 'La Seine') As f;";
+                    "WHERE waterway LIKE 'river' AND name LIKE 'La Seine') AS f;";
 
             //vrati true/false ci sa kruh pretina s riekou
-            String isIntersectionEmpty = "SELECT ST_IsEmpty(ST_Intersection((SELECT ST_Buffer(ST_MakePoint(" + radiusData.getLng() + ", " + radiusData.getLat() + ")::geography," + radiusData.getRadius() + ")), (SELECT ST_Buffer(ST_Union(ST_Transform(way,4326))::geography, 500) FROM planet_osm_line WHERE waterway LIKE 'river' AND name LIKE 'La Seine'))::geometry);";
+            String isIntersectionEmpty = "SELECT ST_IsEmpty(ST_Intersection(" +
+                    "(SELECT ST_Buffer(ST_MakePoint(" + radiusData.getLng() + ", " + radiusData.getLat() + ")::geography," + radiusData.getRadius() + ")), " +
+                    "(SELECT ST_Buffer(ST_Union(ST_Transform(way,4326))::geography, 500) " +
+                    "FROM planet_osm_line " +
+                    "WHERE waterway LIKE 'river' AND name LIKE 'La Seine'))::geometry);";
 
             // vrati hotely v prieniku rieky a kruhu
             String hotelIntersectionPolygon = "SELECT row_to_json(f) FROM " +
