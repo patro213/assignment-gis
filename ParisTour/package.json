@@ -1,0 +1,16 @@
+{
+  "title": "ParisTour Addon",
+  "name": "paristour",
+  "version": "0.0.1",
+  "description": "Paris tour add-on",
+  "main": "index.js",
+  "author": "Patrik Januska",
+  "engines": {
+    "firefox": ">=38.0a1",
+    "fennec": ">=38.0a1"
+  },
+  "license": "MIT",
+  "keywords": [
+    "jetpack"
+  ]
+}

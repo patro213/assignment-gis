@@ -1,0 +1,77 @@
+body { margin:0; padding:0; }
+#map { position:absolute; top:0; bottom:0; width:100%; }
+#user_input {
+    border: 2px solid black;
+    background-color: lightgreen;
+    position: absolute;
+    top: 20px;
+    right:0px;
+}
+
+.map-overlay {
+    position: relative;
+    width: 15%;
+    max-height: 300px;
+    top: 250px;
+    bottom: 100px;
+    left: 3px;
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    background-color: #f8f8f8;
+    border: 3px solid black;
+    overflow: auto;
+}
+
+.map-overlay fieldset {
+    display: none;
+    background: #ddd;
+    border: none;
+    padding: 10px;
+    margin: 0;
+}
+
+.map-overlay .listing {
+    overflow: auto;
+    max-height: 100%;
+    cursor:pointer;
+}
+
+.map-overlay .listing > * {
+    display: block;
+    padding: 5px 10px;
+    margin: 0;
+}
+
+.map-overlay .listing a {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    color: #404;
+    text-decoration: none;
+}
+
+.map-overlay .listing a:hover {
+    background: #f0f0f0;
+}
+
+.places-to-visit{
+    text-align: center;
+    font-weight: bold;
+    font-size: 14px;
+    background-color: #2bd000;
+    height: 30px;
+    line-height: 30px;
+    border-bottom: 1px solid;
+}
+
+#distance{
+    font: 15px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    position: absolute;
+    text-align: center;
+    font-weight: 600;
+    width: 200px;
+    height: 50px;
+    line-height: 50px;
+    top: 180px;
+    left: 50px;
+    background-color: red;
+    color: white;
+    border: 1px solid white;
+}

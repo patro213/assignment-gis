@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div id="wrapper">
+
+    <div id="menu-items">
+        <div id="titletext">
+            <img src="logo.png" class="logo">
+        </div>
+
+        <div id="separator1" class="separator"></div>
+
+        <div id="block_counts" class="box" style="display: none">
+            <div id="radius" class="slider">
+                <label>Okruh vyhľadávania: <span id='slider-value'>500 m</span></label>
+                <input id='slider' type='range' min='0' max='100' step='0' value='50'/>
+            </div>
+        </div>
+
+        <div id='checkboxes' style="display: none">
+            <nav class='listing-group'>
+                <input type='checkbox' id='cinema' value="cinema" checked='checked'>
+                <label for='cinema'>Kiná</label>
+                <input type='checkbox' id='theatre' value="theatre" checked='checked'>
+                <label for='theatre'>Divadlá</label>
+                <input type='checkbox' id='museum' value="museum">
+                <label for='museum'>Múzeá</label>
+            </nav>
+            <nav class='listing-group'>
+                <input type='checkbox' id='gallery' value="gallery">
+                <label for='gallery'>Galérie</label>
+                <input type='checkbox' id='bar' value="bar">
+                <label for='bar'>Bary</label>
+                <input type='checkbox' id='hotel' value="hotel">
+                <label for='hotel'>Hotely</label>
+            </nav>
+        </div>
+
+        <div id="separator2" class="separator" style="display: none"></div>
+
+        <div id="div_show_heatmap" class="menu-entry" style="display: none">Zobraziť heatmapu</div>
+
+        <div id="div_find_hotels" class="menu-entry" style="display: none">Vyhľadať hotely</div>
+
+        <div id="div_show_river" class="menu-entry" style="display: none">Zobraziť hotely pri rieke</div>
+
+        <div id="separator3" class="separator" style="display: none"></div>
+
+        <div id="div_enable_paristour" class="menu-entry" >Spustiť ParisTour</div>
+
+        <div id="div_stop_paristour" class="menu-entry" style="display: none">Pozastaviť ParisTour</div>
+
+    </div>
+</div>
+</body>
+</html>
